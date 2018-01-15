@@ -1,39 +1,32 @@
 #!/usr/bin/perl
 
-#-----------READ PLEASE!----------------
+#----------- PLEASE READ -------------
 
 # In order to run this script you should download the file ProteomicGCcalculator.zip
-# and unzip it wherever you want. Modify the path in the line
-# my $path = '/Users/marioalberto/Desktop/ProteomicGCcalculator';
+# and unzip it. Open the file ProteomicGCcalculator_v1.1.pl and modify the path in the line
+# my $path = '/Users/marioalberto/Desktop/ProteomicGCcalculator;'
 
-# If you don't want to download the whole data base of genomes,
-# you can also download the script and the data that you want
-# and make the path like these:
-
-# your_path/your_folder/Mitochondria/my_mitmetffn
-# your_path/your_folder/Mitochondria/my_mitmetgbk  
-# --> If you want to process metazoan mitochondria files
-
-# your_path/your_folder/Mitochondria/my_mitplaffn 
-# --> If you want to process plant mitochondria files
-
-# your_path/your_folder/Chloroplasts/my_chloroffn
-# your_path/your_folder/Chloroplasts/my_chlorogbk  
-# --> If you want to process chloroplasts files
-
-# your_path/your_folder/Bacteria-Archaea/my_ffn
-# your_path/your_folder/Bacteria-Archaea/my_gbk  
-# --> If you want to process Archaea-Bacteria files
-
-# In all the cases above your_path means that you can put it wherever you want, and
-# your_folder means that you have to make a folder with the name you want. But you always
-# have to change the path in the line: 
-
-# my $path = '/Users/marioceron/Desktop/ProteomicGCcalculator';
-
-# like:
+# This script uses genomic databases of Bacteria, plant chloroplasts and metazoan mitochondria. 
+# These databases were downloaded from NCBI (ftp://ftp.ncbi.nlm.nih.gov/) in 2012. You can also 
+# download more recent data, but then you need to re-build the paths like these:
 
 # my $path = 'your_path/your_folder';
+
+# For metazoan mitochondria files:
+# your_path/your_folder/Mitochondria/my_mitmetffn
+# your_path/your_folder/Mitochondria/my_mitmetgbk  
+
+# For plant mitochondria files:
+# your_path/your_folder/Mitochondria/my_mitplaffn 
+# your_path/your_folder/Mitochondria/my_mitplagbk
+
+# For chloroplasts files:
+# your_path/your_folder/Chloroplasts/my_chloroffn
+# your_path/your_folder/Chloroplasts/my_chlorogbk  
+
+# For Archaea-Bacteria files:
+# your_path/your_folder/Bacteria-Archaea/my_ffn
+# your_path/your_folder/Bacteria-Archaea/my_gbk 
 
 #---------------------------------------
 
@@ -220,8 +213,7 @@ foreach $fileDNA (@dirffn) {
 		
 		unless ($answerC == 2) {  
 			
-			if ((($answer eq 'x') & ($gen =~ /^[ACGT]TG/)) || 
-				(($answer eq 'm') || ($answer eq 'c'))) {
+			if ((($answer eq 'x') & ($gen =~ /^[ACGT]TG/)) || (($answer eq 'm') || ($answer eq 'c'))) {
 				
 				$count++;	
 				
@@ -249,17 +241,13 @@ foreach $fileDNA (@dirffn) {
 						TGC C TAG * TTT F TAT Y TGT C TGG W
 						TCA S TCC S TCG S TCT S);
 						
-				if ($taxonomy =~ /(Entomoplasmatales)|(Mycoplasmataceae)
-						|(Acholeplasmatales)|(Candidatus Hodgkinia cicadicola)
-						|(Candidatus Zinderia insecticola CARI)
-						|(Candidatus Nasuia deltocephalinicola str. NAS-ALF)/) {
+				if ($taxonomy =~ /(Entomoplasmatales)|(Mycoplasmataceae)|(Acholeplasmatales)|(Candidatus Hodgkinia cicadicola)|(Candidatus Zinderia insecticola CARI)|(Candidatus Nasuia deltocephalinicola str. NAS-ALF)/) {
 								
 					unless ($taxonomy =~ /laidlawii/) {
 						$SN_code{TGA} = 'TGM'; $Ge_code{TGA} = 'W';
 						$SN_code{TGG} = 'TGM';
 					}
-				} elsif ($taxonomy =~ /(candidate division GN02)
-					|(candidate division SR1)/) {
+				} elsif ($taxonomy =~ /(candidate division GN02)|(candidate division SR1)/) {
 									
 					$SN_code{TGA} = 'MGA'; $Ge_code{TGA} = 'G';
 					$SN_code{GGA} = 'MGa';
@@ -278,8 +266,7 @@ foreach $fileDNA (@dirffn) {
 						$SN_code{TGA} = 'TGM'; $Ge_code{TGA} = 'W';
 						$SN_code{TGG} = 'TGM';
 						
-					} elsif ($fileDNA =~ /Metazoa;Platyhelminthes
-								|Metazoa;Echinodermata/) {
+					} elsif ($fileDNA =~ /Metazoa;Platyhelminthes|Metazoa;Echinodermata/) {
 										
 						$SN_code{ATG} = 'ATG';
 									 $Ge_code{ATA} = 'I';
@@ -313,25 +300,13 @@ foreach $fileDNA (@dirffn) {
 				for ($i = 0; $i<$long_gen; $i += 3) {
 
 					$codon = substr($gen, $i, 3);
-					if ($codon =~ /^(TAT)|(TAC)|(TGT)|(TGC)|(TGG)|(CAA)|(CAG)|
-							(AAA)|(AAG)|(GAA)|(GAG)$/) {
-
+					if ($codon =~ /^(TAT)|(TAC)|(TGT)|(TGC)|(TGG)|(CAA)|(CAG)|(AAA)|(AAG)|(GAA)|(GAG)$/) {
 						$preTC ++;
-
-					} elsif ($codon  =~ /^(TTC)|(TTT)|(ATT)|(ATC)|(ATG)
-						|(ATA)|(CTT)|(CTG)|(CTA)|(CTC)
-						|(CCT)|(CCC)|(CCA)|(CCG)|(ACT)
-						|(ACC)|(ACA)|(ACG)|(GCT)|(GCC)
-						|(GCA)|(GCG)|(CAT)|(CAC)|(AAT)
-						|(AAC)|(GAT)|(GAC)$/) {
-
+					} elsif ($codon  =~ /^(TTC)|(TTT)|(ATT)|(ATC)|(ATG)|(ATA)|(CTT)|(CTG)|(CTA)|(CTC)|(CCT)|(CCC)|(CCA)|(CCG)|(ACT)|(ACC)|(ACA)|(ACG)|(GCT)|(GCC)|(GCA)|(GCG)|(CAT)|(CAC)|(AAT)|(AAC)|(GAT)|(GAC)$/) {
 						$nonpreTC ++;
-					} elsif ($codon  =~ /^(TCA)|(TCG)|(TTA)|(TTG)|(AGA)
-								|(GGA)|(CGA)|(CGG)$/) {
+					} elsif ($codon  =~ /^(TCA)|(TCG)|(TTA)|(TTG)|(AGA)|(GGA)|(CGA)|(CGG)$/) {
 						$preTCslag ++;
-					} elsif ($codon  =~ /^(TCT)|(TCC)|(AGT)|(AGC)|(CTA)
-								|(CTG)|(CTC)|(CTT)|(CGT)|(CGC)
-								|(GGT)|(GGC)|(GGG)$/) {
+					} elsif ($codon  =~ /^(TCT)|(TCC)|(AGT)|(AGC)|(CTA)|(CTG)|(CTC)|(CTT)|(CGT)|(CGC)|(GGT)|(GGC)|(GGG)$/) {
 						$nonpreTCslag ++;
 					}
 					
@@ -431,13 +406,11 @@ foreach $fileDNA (@dirffn) {
 		
 # Here is a list of the lists of amino acids --> This is important for the ENC ---------		
 		
-		@aa = (\@F, \@L, \@I, \@M, \@V, \@S, \@P, \@T, \@A,
-			   \@Y, \@H, \@Q, \@N, \@K, \@D, \@E, \@C, \@W, \@R, \@G);
+		@aa = (\@F, \@L, \@I, \@M, \@V, \@S, \@P, \@T, \@A, \@Y, \@H, \@Q, \@N, \@K, \@D, \@E, \@C, \@W, \@R, \@G);
 
 # ----------- Here the ENC calculations start _______________________
 		
-		$_ = '' for ($Ns, $K2, $K3, $K4, $nj_2, $nj_3, $nj_4,
-					 $nj_Fcfj_2, $nj_Fcfj_3, $nj_Fcfj_4);
+		$_ = '' for ($Ns, $K2, $K3, $K4, $nj_2, $nj_3, $nj_4, $nj_Fcfj_2, $nj_Fcfj_3, $nj_Fcfj_4);
 		@X = ();
 		
 		foreach my $aa (@aa) {

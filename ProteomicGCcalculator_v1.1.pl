@@ -30,8 +30,6 @@
 
 #---------------------------------------
 
-
-
 use File::Basename;
 
 # The program is going to ask some question in the terminal, you just need to answer 
@@ -139,7 +137,7 @@ $_ = '' for my ($fileDNA, $acces);
 
 foreach $fileDNA (@dirffn) {
 	
-	$_ = '' for ($preTCB, $preTCBslag, $preTC, $nonpreTC, $preTCslag, $nonpreTCslag);
+	$_ = '' for ($preTCB, $preTCBslrg, $preTC, $nonpreTC, $preTCslrg, $nonpreTCslrg);
 	
 	if ($answer eq 'c') {
 		open(FILEDNA, "$path/Chloroplasts/my_chloroffn/$fileDNA")
@@ -213,7 +211,8 @@ foreach $fileDNA (@dirffn) {
 		
 		unless ($answerC == 2) {  
 			
-			if ((($answer eq 'x') & ($gen =~ /^[ACGT]TG/)) || (($answer eq 'm') || ($answer eq 'c'))) {
+			if ((($answer eq 'x') & ($gen =~ /^[ACGT]TG/)) || 
+				(($answer eq 'm') || ($answer eq 'c'))) {
 				
 				$count++;	
 				
@@ -242,8 +241,8 @@ foreach $fileDNA (@dirffn) {
 						TCA S TCC S TCG S TCT S);
 						
 				if ($taxonomy =~ /(Entomoplasmatales)|(Mycoplasmataceae)|(Acholeplasmatales)|(Candidatus Hodgkinia cicadicola)|(Candidatus Zinderia insecticola CARI)|(Candidatus Nasuia deltocephalinicola str. NAS-ALF)/) {
-								
 					unless ($taxonomy =~ /laidlawii/) {
+					
 						$SN_code{TGA} = 'TGM'; $Ge_code{TGA} = 'W';
 						$SN_code{TGG} = 'TGM';
 					}
@@ -254,12 +253,12 @@ foreach $fileDNA (@dirffn) {
 					 
 				} elsif ($answerM == 1) {
 				
-					$SN_code{AGA} = 'AGa'; $Ge_code{AGA} = 'S';
-					$SN_code{AGG} = 'AGg'; $Ge_code{AGG} = 'S';
+					$SN_code{AGA} = 'AGa';	$Ge_code{AGA} = 'S';
+					$SN_code{AGG} = 'AGg';	$Ge_code{AGG} = 'S';
 					$SN_code{AGC} = 'AGc'; 
 					$SN_code{AGT} = 'AGt';
 					$SN_code{ATG} = 'ATM'; 
-					                         $Ge_code{ATA} = 'M';
+											$Ge_code{ATA} = 'M';
 					                         
 					if ($fileDNA =~ /Metazoa.Cnidaria/) {
 					
@@ -269,8 +268,8 @@ foreach $fileDNA (@dirffn) {
 					} elsif ($fileDNA =~ /Metazoa;Platyhelminthes|Metazoa;Echinodermata/) {
 										
 						$SN_code{ATG} = 'ATG';
-									 $Ge_code{ATA} = 'I';
-									 $Ge_code{AAA} = 'N';
+						$Ge_code{ATA} = 'I';
+						$Ge_code{AAA} = 'N';
 									 
 					} elsif ($fileDNA =~ /Chordata.Cephalochordata/) {
 					
@@ -304,10 +303,10 @@ foreach $fileDNA (@dirffn) {
 						$preTC ++;
 					} elsif ($codon  =~ /^(TTC)|(TTT)|(ATT)|(ATC)|(ATG)|(ATA)|(CTT)|(CTG)|(CTA)|(CTC)|(CCT)|(CCC)|(CCA)|(CCG)|(ACT)|(ACC)|(ACA)|(ACG)|(GCT)|(GCC)|(GCA)|(GCG)|(CAT)|(CAC)|(AAT)|(AAC)|(GAT)|(GAC)$/) {
 						$nonpreTC ++;
-					} elsif ($codon  =~ /^(TCA)|(TCG)|(TTA)|(TTG)|(AGA)|(GGA)|(CGA)|(CGG)$/) {
-						$preTCslag ++;
-					} elsif ($codon  =~ /^(TCT)|(TCC)|(AGT)|(AGC)|(CTA)|(CTG)|(CTC)|(CTT)|(CGT)|(CGC)|(GGT)|(GGC)|(GGG)$/) {
-						$nonpreTCslag ++;
+					} elsif ($codon  =~ /^(TCA)|(TCG)|(TTA)|(TTG)|(AGA)|(GGA)|(CGA)$/) {
+						$preTCslrg ++;
+					} elsif ($codon  =~ /^(TCT)|(TCC)|(AGT)|(AGC)|(CTA)|(CTG)|(CTC)|(CTT)|(CGT)|(CGC)|(CGG)|(AGG)|(GGT)|(GGC)|(GGG)$/) {
+						$nonpreTCslrg ++;
 					}
 					
 					$SN .= $SN_code { $codon };
@@ -406,11 +405,13 @@ foreach $fileDNA (@dirffn) {
 		
 # Here is a list of the lists of amino acids --> This is important for the ENC ---------		
 		
-		@aa = (\@F, \@L, \@I, \@M, \@V, \@S, \@P, \@T, \@A, \@Y, \@H, \@Q, \@N, \@K, \@D, \@E, \@C, \@W, \@R, \@G);
+		@aa = (\@F, \@L, \@I, \@M, \@V, \@S, \@P, \@T, \@A,
+			   \@Y, \@H, \@Q, \@N, \@K, \@D, \@E, \@C, \@W, \@R, \@G);
 
 # ----------- Here the ENC calculations start _______________________
 		
-		$_ = '' for ($Ns, $K2, $K3, $K4, $nj_2, $nj_3, $nj_4, $nj_Fcfj_2, $nj_Fcfj_3, $nj_Fcfj_4);
+		$_ = '' for ($Ns, $K2, $K3, $K4, $nj_2, $nj_3, $nj_4,
+					 $nj_Fcfj_2, $nj_Fcfj_3, $nj_Fcfj_4);
 		@X = ();
 		
 		foreach my $aa (@aa) {
@@ -515,7 +516,7 @@ foreach $fileDNA (@dirffn) {
 # --------- The next lines are the results of the preTCB alculations --------------------
 		
 		$preTCB = (28/11)*($preTC/$nonpreTC);
-		$preTCBslag = (13/18)*($preTCslag/$nonpreTCslag);
+        $preTCBslrg = ((15 * $preTCslrg)/(7 * $nonpreTCslrg));
 
 # --- The results of genome size, proteome size Gcsyn, GCnonsyn, GC1, GC2, GC3 -------
 
@@ -582,7 +583,7 @@ foreach $fileDNA (@dirffn) {
 
 		print "\-\-Pretermination codons\-\-\n";
 
-		print "preTCB \= $preTCB \tpreTCBslag = $preTCBslag\n\n";
+		print "preTCB \= $preTCB \tpreTCBslrg = $preTCBslrg\n\n";
 		
 		print "\-\-Effective number of codons\-\-\n";
 
@@ -638,7 +639,7 @@ foreach $fileDNA (@dirffn) {
 		print OUT "$proteomesize\t$count\t$err\t$proporcionbuenos\t",
 				"$GC_content_total\t$GC_content1\t$GC_content2\t",
 				"$GC_content3\t$GC_content_S\t$GC_content_NS\t$preTCB\t",
-				"$preTCBslag\t$Nc\t";
+				"$preTCBslrg\t$Nc\t";
 	}
 	
 	if ($answerC != 1) {

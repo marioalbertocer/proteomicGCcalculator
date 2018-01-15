@@ -6,7 +6,7 @@
 # and unzip it. Open the file ProteomicGCcalculator_v1.1.pl and modify the path in the line
 # my $path = '/Users/marioalberto/Desktop/ProteomicGCcalculator;'
 
-# This script uses genomic databases of Bacteria, plant chloroplasts and metazoan mitochondria. 
+# This script uses genomic databases of Bacteria, Archaea, plant chloroplasts and metazoan mitochondria. 
 # These databases were downloaded from NCBI (ftp://ftp.ncbi.nlm.nih.gov/) in 2012. You can also 
 # download more recent data, but then you need to re-build the paths like these:
 
